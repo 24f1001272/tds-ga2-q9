@@ -101,7 +101,11 @@ async def rate_limiter(request: Request, call_next):
             content='{"detail": "Rate limit exceeded"}',
             status_code=429,
             media_type="application/json",
-            headers={"Retry-After": str(retry_after), "Access-Control-Allow-Origin": "*"}
+            headers={
+                "Retry-After": str(retry_after), 
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Expose-Headers": "Retry-After" # <-- We manually added the stamp here!
+            }
         )
         
     rate_limit_db[client_id].append(current_time)
